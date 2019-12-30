@@ -6,7 +6,7 @@ info:
 servers:
 - url: http://0.0.0.0:9090/api/
   description: 本地调试环境
-- url: http://10.10.30.58/api/
+- url: http://10.10.130.100:9090/api/
   description: 测试环境
 tags:
 - description: everything about namespace
