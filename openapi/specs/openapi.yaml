@@ -1,0 +1,139 @@
+openapi: 3.0.0
+info:
+  description: this is a restful api of dtp
+  title: nirvana
+  version: v1.0
+servers:
+- url: http://0.0.0.0:9090/api/
+  description: 本地调试环境
+- url: http://10.10.30.58/api/
+  description: 测试环境
+tags:
+- description: everything about namespace
+  name: namespace
+- description: everything about project
+  name: project
+- description: everything about api
+  name: api
+- description: everythin about env
+  name: env
+- description: everything about global env
+  name: globalenv
+- description: everything about testcase
+  name: case
+- description: everything about testcase run
+  name: test
+- description: everything about script
+  name: script
+- description: everything about task
+  name: task
+
+paths:
+  /namespaces:
+    get:
+      summary: 获取namespace的列表
+      description: 获取namespace的列表
+      operationId: openapi.api.namespace.list
+      tags:
+      - namespace
+      parameters:
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: namespace的返回列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        id:
+                          type: string
+
+    post:
+      summary: 创建namespace
+      description: 新建namespace
+      operationId: openapi.api.namespace.create
+      tags:
+      - namespace
+      parameters:
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - namespace
+              properties:
+                namespace:
+                  type: string
+
+      responses:
+        '200':
+          description: 创建namespace成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createsuccess'
+        '400':
+          description: 创建namespace失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createfailed'
+
+components:
+  schemas:
+    createsuccess:
+      type: object
+      properties:
+        title:
+         type: string
+         example: "创建xx成功"
+    createfailed:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "创建xx失败"
+    updatesuccess:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "更新xx成功"
+    updatefailed:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "更新xx失败"
+    deletesuccess:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "xx已删除"
+    deletefailed:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "删除xx失败"
