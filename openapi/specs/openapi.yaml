@@ -84,6 +84,8 @@ paths:
               properties:
                 namespace:
                   type: string
+                description:
+                  type: string
 
       responses:
         '200':
@@ -98,6 +100,152 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/createfailed'
+
+  /namespaces/{namespace_id}/projects:
+    get:
+      summary: 获取项目列表
+      description: 获取指定的namespace下的项目列表
+      operationId: openapi.api.project.list
+      tags:
+      - project
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: version
+        in: query
+        description: 指定版本
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 返回项目列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        project:
+                          type: string
+                        id:
+                          type: string
+                        description:
+                          type: string
+                        url:
+                          type: string
+
+    post:
+      summary: 创建项目
+      description: 在指定的namespace下创建项目
+      operationId: openapi.api.project.create
+      tags:
+      - project
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                version:
+                  type: string
+      responses:
+        '200':
+          description: 创建项目成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createsuccess'
+        '400':
+          description: 创建项目失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createfailed'
+
+  /namespaces/{namespace_id}/projects/{project_id}:
+    put:
+      summary: 更新项目
+      description: 在指定的namespace下更新项目
+      operationId: openapi.api.project.update
+      tags:
+      - project
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: project的id
+        in: path
+        name: project_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                version:
+                  type: string
+      responses:
+        '200':
+          description: 更新项目成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updatesuccess'
+        '400':
+          description: 更新项目失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updatefailed'
 
 components:
   schemas:

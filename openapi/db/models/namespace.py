@@ -20,6 +20,7 @@ class Namespace(db.Entity):
     delete_at = Optional(datetime.datetime,  nullable=True)
     user = Required(str)
     info = Optional(Json)
+    project = Set('Project')
 
     @classmethod
     @db_session

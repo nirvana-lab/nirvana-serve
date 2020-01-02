@@ -8,11 +8,12 @@ def create_namespace(body, user):
     '''
     :param body: 创建namespace接口的body
     :param user: 创建namespace的用户
-    :return: 无
+    :return: 返回被创建namespace的名字
     '''
     namespace = body.get('namespace')
     description = body.get('description')
     Namespace.create(namespace, description, user)
+    return namespace
 
 
 def namespace_list():
