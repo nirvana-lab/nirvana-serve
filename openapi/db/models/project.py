@@ -46,10 +46,10 @@ class Project(db.Entity):
     def list(cls, namespace_id, version):
         if version:
             objs = select(n for n in Project if n.namespace.id == namespace_id and n.namespace.delete_at == None and
-                          n.openapi_info['version'] == version).order_by(desc(Project.id))
+                          n.openapi_info['version'] == version and n.delete_at == None).order_by(desc(Project.id))
         else:
             objs = select(n for n in Project if n.namespace.id == namespace_id and n.namespace.delete_at == None and
-                          n.latest == True).order_by(desc(Project.id))
+                          n.latest == True and n.delete_at == None).order_by(desc(Project.id))
         data = []
         for obj in objs:
             tmp_dict = {
@@ -75,5 +75,22 @@ class Project(db.Entity):
             obj.openapi_info = body
             obj.user = user
             obj.update_at = datetime.datetime.utcnow()
+        else:
+            raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')
+
+    @classmethod
+    @db_session
+    def delete_project_by_id(cls, namespace_id, project_id, user):
+        obj = get(n for n in Project if n.id == project_id and n.delete_at == None and
+                  n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            obj.delete_at = datetime.datetime.utcnow()
+            obj.user = user
+            if obj.latest == True:
+                project = obj.openapi_info['title']
+                objs = select(n for n in Project if n.delete_at == None and n.openapi_info['title'] == project and
+                              n.namespace.id == namespace_id and n.namespace.delete_at == None).order_by(desc(Project.id))
+                if objs:
+                    objs.first().latest = True
         else:
             raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')

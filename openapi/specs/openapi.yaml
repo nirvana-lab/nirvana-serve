@@ -246,6 +246,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/updatefailed'
+    delete:
+      summary: 删除项目
+      description: 删除指定的项目
+      operationId: openapi.api.project.delete
+      tags:
+      - project
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: project的id
+        in: path
+        name: project_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: 删除项目成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deletesuccess'
+        '400':
+          description: 删除项目失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deletefailed'
 
 components:
   schemas:

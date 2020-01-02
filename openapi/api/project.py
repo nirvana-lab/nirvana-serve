@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import connexion
-from openapi.service.project import create_project, project_list, update_project_by_id
+from openapi.service import project
 from openapi.utils.exception_handle import DefalutError, IsExist, IsNotExist
 
 def list(namespace_id, version=None):
@@ -10,7 +10,7 @@ def list(namespace_id, version=None):
     :return: 返回的项目的列表
     '''
     try:
-        data = project_list(namespace_id, version)
+        data = project.project_list(namespace_id, version)
         return {
             'data': data
         }, 200
@@ -26,10 +26,10 @@ def create(namespace_id, body):
     '''
     try:
         user = connexion.request.headers.get('user')
-        project = create_project(namespace_id, body, user)
+        project_name = project.create_project(namespace_id, body, user)
         return {
                    'title': f'创建项目成功',
-                   'detail': f'创建项目: {project}成功'
+                   'detail': f'创建项目: {project_name}成功'
                }, 201
     except IsExist as e:
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
@@ -46,7 +46,7 @@ def update(namespace_id, project_id, body):
     '''
     try:
         user = connexion.request.headers.get('user')
-        update_project_by_id(namespace_id, project_id, body, user)
+        project.update_project_by_id(namespace_id, project_id, body, user)
         return {
             'title': '更新项目成功',
             'detail': f'更新项目id为{project_id}的项目成功'
@@ -57,3 +57,22 @@ def update(namespace_id, project_id, body):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'更新项目异常', detail=f'{e}')
+
+def delete(namespace_id, project_id):
+    '''
+    API接口： 删除指定的项目
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :return: 返回删除成功的信息
+    '''
+    try:
+        user = connexion.request.headers.get('user')
+        project.delete_project_by_id(namespace_id, project_id, user)
+        return {
+            'title': '删除项目成功',
+            'detail': f'删除项目id为{project_id}的项目成功'
+        }, 200
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'删除项目异常', detail=f'{e}')
