@@ -37,7 +37,6 @@ class Api(db.Entity):
     @classmethod
     @db_session
     def list(cls, namespace_id, project_id):
-        print(namespace_id, project_id)
         objs = select(n for n in Api if n.delete_at == None and n.project.id == project_id and
                       n.project.delete_at == None and n.project.namespace.id == namespace_id and
                       n.project.namespace.delete_at == None)
@@ -52,3 +51,20 @@ class Api(db.Entity):
             }
             data.append(tmp_dict)
         return data
+
+    @classmethod
+    @db_session
+    def get_detail_by_id(cls, namespace_id, project_id, api_id):
+        obj = get(n for n in Api if n.delete_at == None and n.id == api_id and
+                  n.project.id == project_id and n.project.delete_at == None and
+                  n.project.namespace.id == namespace_id and n.project.namespace.delete_at == None)
+        if obj:
+            return {
+                'id': obj.id,
+                'uid': obj.uid,
+                'path': obj.path,
+                'method': obj.method,
+                'api_info': obj.api_info
+            }
+        else:
+            raise IsNotExist(title='Api不存在', detail=f'id为{api_id}的接口不存在')

@@ -314,7 +314,7 @@ paths:
         required: true
       responses:
         '200':
-          description: 返回项目列表
+          description: 返回接口列表
           content:
             application/json:
               schema:
@@ -379,6 +379,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/createfailed'
+
+  /namespaces/{namespace_id}/projects/{project_id}/apis/{api_id}:
+    get:
+      summary: 获取项目下的接口列表
+      description: 获取指定项目下的接口列表
+      operationId: openapi.api.api.detail
+      tags:
+      - api
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: project_id
+        in: path
+        description: project的id
+        schema:
+          type: string
+        required: true
+      - name: api_id
+        in: path
+        description: api的id
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: 返回接口列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        project:
+                          type: string
+                        id:
+                          type: string
+                        description:
+                          type: string
+                        url:
+                          type: string
 
 
 
