@@ -246,6 +246,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/updatefailed'
+
     delete:
       summary: 删除项目
       description: 删除指定的项目
@@ -284,6 +285,102 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/deletefailed'
+
+  /namespaces/{namespace_id}/projects/{project_id}/apis:
+    get:
+      summary: 获取项目下的接口列表
+      description: 获取指定项目下的接口列表
+      operationId: openapi.api.api.list
+      tags:
+      - api
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: project_id
+        in: path
+        description: project的id
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: 返回项目列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        project:
+                          type: string
+                        id:
+                          type: string
+                        description:
+                          type: string
+                        url:
+                          type: string
+    post:
+      summary: 获取项目下的接口列表
+      description: 获取指定项目下的接口列表
+      operationId: openapi.api.api.create
+      tags:
+      - api
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: project_id
+        in: path
+        description: project的id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                api_object:
+                  type: object
+      responses:
+        '200':
+          description: 创建接口成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createsuccess'
+        '400':
+          description: 创建接口失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createfailed'
+
+
 
 components:
   schemas:

@@ -12,7 +12,7 @@ from openapi.utils.problem_handle import problem_exception_handler, exception_ha
 from openapi.db.db import db
 from openapi.db.models.namespace import Namespace # noqa: F401
 from openapi.db.models.project import Project # noqa: F401
-# from openapi.db.models.api import Api # noqa: F401
+from openapi.db.models.api import Api # noqa: F401
 # from openapi.db.models.env import Env # noqa: F401
 # from openapi.db.models.var_global import VarGlobal # noqa: F401
 # from openapi.db.models.script import Script

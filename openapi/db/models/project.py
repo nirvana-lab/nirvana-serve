@@ -23,6 +23,7 @@ class Project(db.Entity):
     info = Optional(Json)
     latest = Required(bool, default=True)
     namespace = Required(Namespace)
+    api = Set('Api')
 
     @classmethod
     @db_session
