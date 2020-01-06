@@ -78,3 +78,23 @@ def update(namespace_id, project_id, api_id, body):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'更新接口异常', detail=f'{e}')
+
+def delete(namespace_id, project_id, api_id):
+    '''
+    API接口: 删除指定接口
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param api_id: api的id
+    :return:
+    '''
+    try:
+        user = connexion.request.headers.get('user')
+        api.delete_api_by_id(namespace_id, project_id, api_id, user)
+        return {
+            'title': '删除接口成功',
+            'detail': f'删除接口id为{api_id}成功'
+        }
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'删除接口异常', detail=f'{e}')

@@ -50,3 +50,14 @@ def update_api_by_id(namespace_id, project_id, api_id, body, user):
     path = list(body.keys())[0]
     method = list(body.get(path).keys())[0]
     Api.update_api_by_id(namespace_id, project_id, api_id, body, path, method, user)
+
+def delete_api_by_id(namespace_id, project_id, api_id, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param api_id: api的id
+    :param user: 删除接口的用户
+    :return:
+    '''
+    Api.delete_api_by_id(namespace_id, project_id, api_id, user)

@@ -82,3 +82,16 @@ class Api(db.Entity):
             obj.update_at = datetime.datetime.utcnow()
         else:
             raise IsNotExist(title='Api不存在', detail=f'id为{api_id}的接口不存在')
+
+    @classmethod
+    @db_session
+    def delete_api_by_id(cls, namespace_id, project_id, api_id, user):
+        obj = get(n for n in Api if n.delete_at == None and n.id == api_id and
+                  n.project.id == project_id and n.project.delete_at == None and
+                  n.project.namespace.id == namespace_id and n.project.namespace.delete_at == None)
+
+        if obj:
+            obj.delete_at = datetime.datetime.utcnow()
+            obj.user = user
+        else:
+            raise IsNotExist(title='Api不存在', detail=f'id为{api_id}的接口不存在')
