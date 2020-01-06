@@ -68,3 +68,17 @@ class Api(db.Entity):
             }
         else:
             raise IsNotExist(title='Api不存在', detail=f'id为{api_id}的接口不存在')
+
+    @classmethod
+    @db_session
+    def update_api_by_id(cls, namespace_id, project_id, api_id, api_obj, path, method, user):
+        obj = get(n for n in Api if n.delete_at == None and n.id == api_id and
+                  n.project.id == project_id and n.project.delete_at == None and
+                  n.project.namespace.id == namespace_id and n.project.namespace.delete_at == None and
+                  n.path == path and n.method == method)
+        if obj:
+            obj.api_info = api_obj
+            obj.user = user
+            obj.update_at = datetime.datetime.utcnow()
+        else:
+            raise IsNotExist(title='Api不存在', detail=f'id为{api_id}的接口不存在')

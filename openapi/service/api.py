@@ -27,7 +27,7 @@ def api_list(namespace_id, project_id):
     '''
     return Api.list(namespace_id, project_id)
 
-def api_detail_by_id(namespace_id, project_id, api_id):
+def get_detail_by_id(namespace_id, project_id, api_id):
     '''
 
     :param namespace_id: namespace的id
@@ -36,3 +36,17 @@ def api_detail_by_id(namespace_id, project_id, api_id):
     :return: 返回指定接口的详情
     '''
     return Api.get_detail_by_id(namespace_id, project_id, api_id)
+
+def update_api_by_id(namespace_id, project_id, api_id, body, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param api_id: api的id
+    :param body: 更新接口的body
+    :param user: 更新接口的用户
+    :return:
+    '''
+    path = list(body.keys())[0]
+    method = list(body.get(path).keys())[0]
+    Api.update_api_by_id(namespace_id, project_id, api_id, body, path, method, user)
