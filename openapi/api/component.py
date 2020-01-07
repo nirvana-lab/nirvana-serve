@@ -3,8 +3,20 @@ import connexion
 from openapi.utils.exception_handle import DefalutError, IsExist, IsNotExist
 from openapi.service import component
 
-def list():
-    pass
+def list(namespace_id, project_id):
+    '''
+    API接口：获取项目下的Component列表
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :return: 返回Component列表
+    '''
+    try:
+        data = component.component_list(namespace_id, project_id)
+        return {
+            'data': data
+        }, 200
+    except Exception as e:
+        raise DefalutError(title=f'获取Component列表异常', detail=f'{e}')
 
 
 def create(namespace_id, project_id, body):

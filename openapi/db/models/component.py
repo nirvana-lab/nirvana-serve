@@ -35,3 +35,20 @@ class Component(db.Entity):
             raise IsExist(title='不能创建同名的Component', detail=f'类型为{type}的Component已经存在，uid为{obj.uid}')
         else:
             Component(component=component, component_content=component_content, type=type, user=user, project=project_id)
+
+    @classmethod
+    @db_session
+    def list(cls, namespace_id, project_id):
+        data = []
+        objs = select(n for n in Component if n.delete_at == None and
+                      n.project.id == project_id and n.project.delete_at == None and
+                      n.project.namespace.id == namespace_id and n.project.namespace.delete_at == None)
+        for obj in objs:
+            tmp_dict = {
+                'id': obj.id,
+                'uid': obj.uid,
+                'type': obj.type,
+                'component_content': obj.component_content
+            }
+            data.append(tmp_dict)
+        return data
