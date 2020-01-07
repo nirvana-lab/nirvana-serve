@@ -24,6 +24,7 @@ class Project(db.Entity):
     latest = Required(bool, default=True)
     namespace = Required(Namespace)
     api = Set('Api')
+    component = Set('Component')
 
     @classmethod
     @db_session

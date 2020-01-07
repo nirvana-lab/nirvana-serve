@@ -15,6 +15,8 @@ tags:
   name: project
 - description: everything about api
   name: api
+- description: component
+  name: component
 - description: everythin about env
   name: env
 - description: everything about global env
@@ -364,7 +366,7 @@ paths:
             schema:
               type: object
               properties:
-                api_object:
+                api_content:
                   type: object
       responses:
         '200':
@@ -470,7 +472,7 @@ paths:
             schema:
               type: object
               properties:
-                api_object:
+                api_content:
                   type: object
       responses:
         '200':
@@ -485,7 +487,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/updatefailed'
-
     delete:
       summary: 删除指定接口
       description: 删除指定接
@@ -530,6 +531,101 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/deletefailed'
+  /namespaces/{namespace_id}/projects/{project_id}/components:
+    get:
+      summary: 获取项目下的components列表
+      description: 获取项目下的components列表
+      operationId: openapi.api.component.list
+      tags:
+      - component
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: project_id
+        in: path
+        description: project的id
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: 返回接口列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        project:
+                          type: string
+                        id:
+                          type: string
+                        description:
+                          type: string
+                        url:
+                          type: string
+    post:
+      summary: 创建component
+      description: 创建component
+      operationId: openapi.api.component.create
+      tags:
+      - component
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: project_id
+        in: path
+        description: project的id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                component_content:
+                  type: object
+                type:
+                  type: string
+      responses:
+        '200':
+          description: 更新component成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updatesuccess'
+        '400':
+          description: 更新component失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updatefailed'
 
 
 
