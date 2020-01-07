@@ -68,3 +68,20 @@ class Component(db.Entity):
             }
         else:
             raise IsNotExist(title='Component不存在', detail=f'id为{component_id}的Component不存在')
+
+
+    @classmethod
+    @db_session
+    def update_component_by_id(cls, namespace_id, project_id, component_id, component, component_content, user):
+        obj = get(n for n in Component if n.delete_at == None and  n.id == component_id and
+                  n.project.id == project_id and n.project.delete_at == None and
+                  n.project.namespace.id == namespace_id and n.project.namespace.delete_at == None)
+        if obj:
+            if obj.component == component:
+                obj.component_content = component_content
+                obj.user = user
+                obj.update_at = datetime.datetime.utcnow()
+            else:
+                raise DefalutError(title='不能修改Component名', detail=f'不能将Component名{obj.component}修改为{component}')
+        else:
+            raise IsNotExist(title='Component不存在', detail=f'id为{component_id}的Component不存在')

@@ -54,3 +54,25 @@ def detail(namespace_id, project_id, component_id):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'获取Component详情异常', detail=f'{e}')
+
+
+def update(namespace_id, project_id, component_id, body):
+    '''
+    API接口: 更新指定的Component
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param component_id: component的id
+    :param body: 更新Component的内容
+    :return:
+    '''
+    try:
+        user = connexion.request.headers.get('user')
+        component.update_component_by_id(namespace_id, project_id, component_id, body, user)
+        return {
+            'title': '更新component成功',
+            'detail': '更新component成功'
+        }, 200
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'更新Component异常', detail=f'{e}')

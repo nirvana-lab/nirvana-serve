@@ -615,17 +615,17 @@ paths:
                   type: string
       responses:
         '200':
-          description: 更新component成功
+          description: 创建component成功
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/updatesuccess'
+                $ref: '#/components/schemas/createsuccess'
         '400':
-          description: 更新component失败
+          description: 创建component失败
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/updatefailed'
+                $ref: '#/components/schemas/createfailed'
 
   /namespaces/{namespace_id}/projects/{project_id}/components/{component_id}:
     get:
@@ -675,6 +675,58 @@ paths:
                       type: string
                     uid:
                       type: string
+    put:
+      summary: 更新components详情
+      description: 更新components详情
+      operationId: openapi.api.component.update
+      tags:
+      - component
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: project_id
+        in: path
+        description: project的id
+        schema:
+          type: string
+        required: true
+      - name: component_id
+        in: path
+        description: component的id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                component_content:
+                  type: object
+      responses:
+        '200':
+          description: 更新component成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updatesuccess'
+        '400':
+          description: 更新component失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updatefailed'
 
 components:
   schemas:

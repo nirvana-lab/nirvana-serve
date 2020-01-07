@@ -38,3 +38,18 @@ def get_detail_by_id(namespace_id, project_id, component_id):
     :return: 返回component的详情
     '''
     return Component.get_detail_by_id(namespace_id, project_id, component_id)
+
+
+def update_component_by_id(namespace_id, project_id, component_id, body, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param component_id: component的id
+    :param body: 更新component的内容
+    :param user: 更新component的用户
+    :return:
+    '''
+    component_content = body.get('component_content')
+    component = list(component_content.keys())[0]
+    Component.update_component_by_id(namespace_id, project_id, component_id, component, component_content, user)
