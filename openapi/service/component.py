@@ -27,3 +27,14 @@ def component_list(namespace_id, project_id):
     :return: 返回component的列表
     '''
     return Component.list(namespace_id, project_id)
+
+
+def get_detail_by_id(namespace_id, project_id, component_id):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param component_id: component的id
+    :return: 返回component的详情
+    '''
+    return Component.get_detail_by_id(namespace_id, project_id, component_id)

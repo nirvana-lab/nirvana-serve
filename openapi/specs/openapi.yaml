@@ -559,7 +559,7 @@ paths:
         required: true
       responses:
         '200':
-          description: 返回接口列表
+          description: 返回component列表
           content:
             application/json:
               schema:
@@ -570,13 +570,13 @@ paths:
                     items:
                       type: object
                       properties:
-                        project:
+                        component_content:
                           type: string
                         id:
                           type: string
-                        description:
+                        type:
                           type: string
-                        url:
+                        uid:
                           type: string
     post:
       summary: 创建component
@@ -627,7 +627,54 @@ paths:
               schema:
                 $ref: '#/components/schemas/updatefailed'
 
-
+  /namespaces/{namespace_id}/projects/{project_id}/components/{component_id}:
+    get:
+      summary: 获取components详情
+      description: 获取components详情
+      operationId: openapi.api.component.detail
+      tags:
+      - component
+      parameters:
+      - description: namespace的id
+        in: path
+        name: namespace_id
+        schema:
+          type: string
+        required: true
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: project_id
+        in: path
+        description: project的id
+        schema:
+          type: string
+        required: true
+      - name: component_id
+        in: path
+        description: component的id
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: 返回component的详情
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    component_content:
+                      type: string
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    uid:
+                      type: string
 
 components:
   schemas:

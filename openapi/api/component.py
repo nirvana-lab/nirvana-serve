@@ -38,3 +38,19 @@ def create(namespace_id, project_id, body):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'创建Component异常', detail=f'{e}')
+
+def detail(namespace_id, project_id, component_id):
+    '''
+    API接口：获取指定Component的详情
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param component_id: component的id
+    :return: 返回Component的详情
+    '''
+    try:
+        data = component.get_detail_by_id(namespace_id, project_id, component_id)
+        return data, 200
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'获取Component详情异常', detail=f'{e}')

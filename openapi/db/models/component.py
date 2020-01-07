@@ -52,3 +52,19 @@ class Component(db.Entity):
             }
             data.append(tmp_dict)
         return data
+
+    @classmethod
+    @db_session
+    def get_detail_by_id(cls, namespace_id, project_id, component_id):
+        obj = get(n for n in Component if n.delete_at == None and n.id == component_id and
+                  n.project.id == project_id and n.project.delete_at == None and
+                  n.project.namespace.id == namespace_id and n.project.namespace.delete_at == None)
+        if obj:
+            return {
+                'id': obj.id,
+                'uid': obj.uid,
+                'type': obj.type,
+                'component_content': obj.component_content
+            }
+        else:
+            raise IsNotExist(title='Component不存在', detail=f'id为{component_id}的Component不存在')
