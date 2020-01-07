@@ -53,3 +53,14 @@ def update_component_by_id(namespace_id, project_id, component_id, body, user):
     component_content = body.get('component_content')
     component = list(component_content.keys())[0]
     Component.update_component_by_id(namespace_id, project_id, component_id, component, component_content, user)
+
+def delete_component_by_id(namespace_id, project_id, component_id, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param component_id: component的id
+    :param user: 删除component的用户
+    :return:
+    '''
+    Component.delete_api_by_id(namespace_id, project_id, component_id, user)

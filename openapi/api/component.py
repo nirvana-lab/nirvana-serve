@@ -76,3 +76,24 @@ def update(namespace_id, project_id, component_id, body):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'更新Component异常', detail=f'{e}')
+
+
+def delete(namespace_id, project_id, component_id):
+    '''
+    API接口：删除指定的Component
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param component_id: component的id
+    :return:
+    '''
+    try:
+        user = connexion.request.headers.get('user')
+        component.delete_component_by_id(namespace_id, project_id, component_id, user)
+        return {
+            'title': '删除component成功',
+            'detail': '删除component成功',
+        }, 200
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'删除Component异常', detail=f'{e}')

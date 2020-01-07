@@ -85,3 +85,16 @@ class Component(db.Entity):
                 raise DefalutError(title='不能修改Component名', detail=f'不能将Component名{obj.component}修改为{component}')
         else:
             raise IsNotExist(title='Component不存在', detail=f'id为{component_id}的Component不存在')
+
+
+    @classmethod
+    @db_session
+    def delete_api_by_id(cls, namespace_id, project_id, component_id, user):
+        obj = get(n for n in Component if n.delete_at == None and n.delete_at == None and n.id ==component_id and
+                  n.project.id == project_id and n.project.delete_at == None and
+                  n.project.namespace.id == namespace_id and n.project.namespace.delete_at == None)
+        if obj:
+            obj.delete_at = datetime.datetime.utcnow()
+            obj.user = user
+        else:
+            raise IsNotExist(title='Component不存在', detail=f'id为{component_id}的Component不存在')
