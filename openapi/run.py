@@ -6,14 +6,18 @@ from flask_cors import CORS
 from logbook import Logger
 # from flask import request
 from openapi.config.config import check_config_path
+from flask import g
 
 from openapi.utils.log_handle import setup_logger
 from openapi.utils.problem_handle import problem_exception_handler, exception_handler
+from openapi.utils.exception_handle import DefalutError
 from openapi.db.db import db
+from openapi.utils.auth_handle import check_token
+from openapi.db.models.user import User # noqa: F401
 from openapi.db.models.namespace import Namespace # noqa: F401
-from openapi.db.models.project import Project # noqa: F401
-from openapi.db.models.api import Api # noqa: F401
-from openapi.db.models.component import Component # noqa: F401
+# from openapi.db.models.project import Project # noqa: F401
+# from openapi.db.models.api import Api # noqa: F401
+# from openapi.db.models.component import Component # noqa: F401
 # from openapi.db.models.env import Env # noqa: F401
 # from openapi.db.models.var_global import VarGlobal # noqa: F401
 # from openapi.db.models.script import Script
@@ -42,4 +46,16 @@ if __name__ == '__main__':
     app.add_error_handler(Exception, exception_handler)
     log.info('error handler added')
     check_config_path()
+
+    @app.app.before_request
+    def before():
+        if connexion.request.path == '/api/register' or connexion.request.path == '/api/login':
+            pass
+        else:
+            user = check_token(connexion.request.headers.get('token'))
+            if user:
+                g.username = user
+            else:
+                raise DefalutError(title=f'验证失败', detail=f'验证失败', status=401, type='AuthError')
+
     app.run(host='0.0.0.0', debug=True)

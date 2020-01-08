@@ -3,7 +3,7 @@ from openapi.db.db import db
 from pony.orm import (Json, PrimaryKey, Required, db_session, select, desc, Set, get, Optional)
 import uuid
 import datetime
-from openapi.utils.exception_handle import IsExist
+from openapi.utils.exception_handle import IsExist, IsNotExist
 from logbook import Logger
 
 log = Logger('db/namespace')
@@ -20,7 +20,7 @@ class Namespace(db.Entity):
     delete_at = Optional(datetime.datetime,  nullable=True)
     user = Required(str)
     info = Optional(Json)
-    project = Set('Project')
+    # project = Set('Project')
 
     @classmethod
     @db_session
@@ -44,3 +44,14 @@ class Namespace(db.Entity):
             }
             data.append(tmp_dict)
         return data
+
+
+    @classmethod
+    @db_session
+    def delete_namespace_by_id(cls, namespace_id, user):
+        obj = get(n for n in Namespace if n.delete_at == None and n.id == namespace_id)
+        if obj:
+            obj.delete_at = datetime.datetime.utcnow()
+            obj.user = user
+        else:
+            raise IsNotExist(title='Namespace不存在', detail=f'id为{namespace_id}的接口不存在')

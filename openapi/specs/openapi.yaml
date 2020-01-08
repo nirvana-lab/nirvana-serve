@@ -2,811 +2,252 @@ openapi: 3.0.0
 info:
   description: this is a restful api of dtp
   title: nirvana
-  version: v1.0
+  version: 1.0.0
 servers:
 - url: http://0.0.0.0:9090/api/
   description: 本地调试环境
 - url: http://10.10.130.100:9090/api/
   description: 测试环境
 tags:
+- description: everything about user
+  name: user
 - description: everything about namespace
-  name: namespace
-- description: everything about project
-  name: project
-- description: everything about api
-  name: api
-- description: component
-  name: component
-- description: everythin about env
-  name: env
-- description: everything about global env
-  name: globalenv
-- description: everything about testcase
-  name: case
-- description: everything about testcase run
-  name: test
-- description: everything about script
-  name: script
-- description: everything about task
-  name: task
+  name: namespaces
+
 
 paths:
+  /login:
+    post:
+      summary: 登陆
+      operationId: openapi.api.user.login
+      description: 登陆
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+           schema:
+             type: object
+             properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        '200':
+          description: 登陆成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  detail:
+                    type: string
+  /register:
+    post:
+      summary: 注册新用户
+      operationId: openapi.api.user.register
+      description: 注册新用户
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: 注册成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  detail:
+                    type: string
+
   /namespaces:
     get:
-      summary: 获取namespace的列表
-      description: 获取namespace的列表
+      tags:
+      - namespaces
+      summary: 获取namespace列表
       operationId: openapi.api.namespace.list
-      tags:
-      - namespace
       parameters:
-      - description: 操作人
+      - name: token
         in: header
-        name: user
+        description: 用户的token令牌
+        required: true
         schema:
           type: string
-        required: true
       responses:
         '200':
-          description: namespace的返回列表
+          description: 返回namespace和project的聚合结构
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        id:
-                          type: string
+                $ref: '#/components/schemas/Namespace'
 
     post:
+      tags:
+      - namespaces
       summary: 创建namespace
-      description: 新建namespace
       operationId: openapi.api.namespace.create
-      tags:
-      - namespace
       parameters:
-      - description: 操作人
+      - name: token
         in: header
-        name: user
+        description: 用户的token令牌
+        required: true
         schema:
           type: string
-        required: true
       requestBody:
+        description: 创建命名空间传名称和描述
         content:
           application/json:
             schema:
-              type: object
-              required:
-              - namespace
-              properties:
-                namespace:
-                  type: string
-                description:
-                  type: string
-
+             $ref: '#/components/schemas/NamespaceBody'
+        required: true
       responses:
-        '200':
-          description: 创建namespace成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createsuccess'
-        '400':
-          description: 创建namespace失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createfailed'
+        200:
+          description: ''
 
-  /namespaces/{namespace_id}/projects:
-    get:
-      summary: 获取项目列表
-      description: 获取指定的namespace下的项目列表
-      operationId: openapi.api.project.list
-      tags:
-      - project
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: version
-        in: query
-        description: 指定版本
-        schema:
-          type: string
-      responses:
-        '200':
-          description: 返回项目列表
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        project:
-                          type: string
-                        id:
-                          type: string
-                        description:
-                          type: string
-                        url:
-                          type: string
-
-    post:
-      summary: 创建项目
-      description: 在指定的namespace下创建项目
-      operationId: openapi.api.project.create
-      tags:
-      - project
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              required:
-                - title
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                version:
-                  type: string
-      responses:
-        '200':
-          description: 创建项目成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createsuccess'
-        '400':
-          description: 创建项目失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createfailed'
-
-  /namespaces/{namespace_id}/projects/{project_id}:
-    put:
-      summary: 更新项目
-      description: 在指定的namespace下更新项目
-      operationId: openapi.api.project.update
-      tags:
-      - project
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: project的id
-        in: path
-        name: project_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              required:
-                - title
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                version:
-                  type: string
-      responses:
-        '200':
-          description: 更新项目成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/updatesuccess'
-        '400':
-          description: 更新项目失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/updatefailed'
-
+  /namespaces/{namespace_id}:
     delete:
-      summary: 删除项目
-      description: 删除指定的项目
-      operationId: openapi.api.project.delete
       tags:
-      - project
+      - namespaces
+      summary: 删除命名空间
+      operationId: openapi.api.namespace.delete
       parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: project的id
-        in: path
-        name: project_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
+      - name: token
         in: header
-        name: user
+        description: 用户token令牌
+        required: true
         schema:
           type: string
+      - name: namespace_id
+        in: path
+        description: 命名空间id
         required: true
+        schema:
+          type: string
       responses:
-        '200':
-          description: 删除项目成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/deletesuccess'
-        '400':
-          description: 删除项目失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/deletefailed'
-
-  /namespaces/{namespace_id}/projects/{project_id}/apis:
-    get:
-      summary: 获取项目下的接口列表
-      description: 获取指定项目下的接口列表
-      operationId: openapi.api.api.list
-      tags:
-      - api
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      responses:
-        '200':
-          description: 返回接口列表
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        project:
-                          type: string
-                        id:
-                          type: string
-                        description:
-                          type: string
-                        url:
-                          type: string
-    post:
-      summary: 获取项目下的接口列表
-      description: 获取指定项目下的接口列表
-      operationId: openapi.api.api.create
-      tags:
-      - api
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                api_content:
-                  type: object
-      responses:
-        '200':
-          description: 创建接口成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createsuccess'
-        '400':
-          description: 创建接口失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createfailed'
-
-  /namespaces/{namespace_id}/projects/{project_id}/apis/{api_id}:
-    get:
-      summary: 获取项目下的接口列表
-      description: 获取指定项目下的接口列表
-      operationId: openapi.api.api.detail
-      tags:
-      - api
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      - name: api_id
-        in: path
-        description: api的id
-        schema:
-          type: string
-        required: true
-      responses:
-        '200':
-          description: 返回接口列表
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        project:
-                          type: string
-                        id:
-                          type: string
-                        description:
-                          type: string
-                        url:
-                          type: string
-    put:
-      summary: 更新指定接口
-      description: 更新指定接口的内容
-      operationId: openapi.api.api.update
-      tags:
-      - api
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      - name: api_id
-        in: path
-        description: api的id
-        schema:
-          type: string
-        required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                api_content:
-                  type: object
-      responses:
-        '200':
-          description: 更新项目成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/updatesuccess'
-        '400':
-          description: 更新项目失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/updatefailed'
-    delete:
-      summary: 删除指定接口
-      description: 删除指定接
-      operationId: openapi.api.api.delete
-      tags:
-      - api
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      - name: api_id
-        in: path
-        description: api的id
-        schema:
-          type: string
-        required: true
-      responses:
-        '200':
-          description: 删除接口成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/deletesuccess'
-        '400':
-          description: 删除接口失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/deletefailed'
-  /namespaces/{namespace_id}/projects/{project_id}/components:
-    get:
-      summary: 获取项目下的components列表
-      description: 获取项目下的components列表
-      operationId: openapi.api.component.list
-      tags:
-      - component
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      responses:
-        '200':
-          description: 返回component列表
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        component_content:
-                          type: string
-                        id:
-                          type: string
-                        type:
-                          type: string
-                        uid:
-                          type: string
-    post:
-      summary: 创建component
-      description: 创建component
-      operationId: openapi.api.component.create
-      tags:
-      - component
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                component_content:
-                  type: object
-                type:
-                  type: string
-      responses:
-        '200':
-          description: 创建component成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createsuccess'
-        '400':
-          description: 创建component失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createfailed'
-
-  /namespaces/{namespace_id}/projects/{project_id}/components/{component_id}:
-    get:
-      summary: 获取components详情
-      description: 获取components详情
-      operationId: openapi.api.component.detail
-      tags:
-      - component
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      - name: component_id
-        in: path
-        description: component的id
-        schema:
-          type: string
-        required: true
-      responses:
-        '200':
-          description: 返回component的详情
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                    component_content:
-                      type: string
-                    id:
-                      type: string
-                    type:
-                      type: string
-                    uid:
-                      type: string
-    put:
-      summary: 更新components详情
-      description: 更新components详情
-      operationId: openapi.api.component.update
-      tags:
-      - component
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      - name: component_id
-        in: path
-        description: component的id
-        schema:
-          type: string
-        required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                component_content:
-                  type: object
-      responses:
-        '200':
-          description: 更新component成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/updatesuccess'
-        '400':
-          description: 更新component失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/updatefailed'
-    delete:
-      summary: 删除components
-      description: 删除components
-      operationId: openapi.api.component.delete
-      tags:
-      - component
-      parameters:
-      - description: namespace的id
-        in: path
-        name: namespace_id
-        schema:
-          type: string
-        required: true
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
-      - name: project_id
-        in: path
-        description: project的id
-        schema:
-          type: string
-        required: true
-      - name: component_id
-        in: path
-        description: component的id
-        schema:
-          type: string
-        required: true
-      responses:
-        '200':
-          description: 删除component成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/deletesuccess'
-        '400':
-          description: 删除component失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/deletefailed'
-
+        200:
+          description: ''
 components:
   schemas:
-    createsuccess:
+    NamespaceBody:
       type: object
       properties:
-        title:
-         type: string
-         example: "创建xx成功"
-    createfailed:
-      type: object
-      properties:
-        title:
+        name:
           type: string
-          example: "创建xx失败"
-    updatesuccess:
+        description:
+          type: string
+    Namespace:
       type: object
       properties:
-        title:
+        id:
+          type: integer
+        name:
           type: string
-          example: "更新xx成功"
-    updatefailed:
+        description:
+          type: string
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+    ProjectBody:
       type: object
       properties:
-        title:
-          type: string
-          example: "更新xx失败"
-    deletesuccess:
+        detail:
+          type: object
+          properties:
+            info:
+              type: object
+            servers:
+              type: array
+              items:
+                type: string
+            tags:
+              type: array
+              items:
+                type: string
+        apis:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiBody'
+        models:
+          type: array
+          items:
+            type: object
+        envs:
+          type: array
+          items:
+            type: object
+        scripts:
+          type: array
+          items:
+            type: object
+    ApiBody:
       type: object
       properties:
-        title:
+        path:
           type: string
-          example: "xx已删除"
-    deletefailed:
+        tags:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        params:
+          type: object
+        query:
+          type: object
+        header:
+          type: object
+        responseBody:
+          type: object
+          example: {
+            name: '123'
+          }
+        responseBodyType:
+          type: object
+          example: {
+            name: string
+          }
+        requestBody:
+          type: array
+          items:
+            type: object
+            example: {
+              code: 200,
+              description: '',
+              data: {},
+            }
+    PutProjectBody:
       type: object
       properties:
-        title:
+        name:
           type: string
-          example: "删除xx失败"
+        description:
+          type: string
+        tag:
+          type: string
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        tag:
+          type: string

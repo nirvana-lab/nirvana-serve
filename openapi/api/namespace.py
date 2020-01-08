@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import connexion
-from openapi.service.namespace import create_namespace, namespace_list
-from openapi.utils.exception_handle import DefalutError, IsExist
+from openapi.service.namespace import create_namespace, namespace_list, delete_namespace
+from openapi.utils.exception_handle import DefalutError, IsExist, IsNotExist
+from flask import g
 
 def list():
     '''
@@ -33,3 +34,20 @@ def create(body):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'创建namespace异常', detail=f'{e}')
+
+def delete(namespace_id):
+    '''
+    API接口：删除指定的namespace
+    :param namespace_id: 要被删除的namespace的id
+    :return:
+    '''
+    try:
+        delete_namespace(namespace_id, g.username)
+        return {
+            'title': '删除namespace成功',
+            'detail': '删除namespace成功'
+        }, 200
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'删除namespace异常', detail=f'{e}')
