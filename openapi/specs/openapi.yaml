@@ -13,6 +13,8 @@ tags:
   name: user
 - description: everything about namespace
   name: namespaces
+- description: everything about project
+  name: project
 
 
 paths:
@@ -74,7 +76,6 @@ paths:
                     type: string
                   detail:
                     type: string
-
   /namespaces:
     get:
       tags:
@@ -118,7 +119,6 @@ paths:
       responses:
         200:
           description: ''
-
   /namespaces/{namespace_id}:
     delete:
       tags:
@@ -141,6 +141,37 @@ paths:
       responses:
         200:
           description: ''
+
+  /project:
+    post:
+      tags:
+      - project
+      summary: 创建项目
+      operationId: openapi.api.project.create
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: 项目信息前端传什么存什么
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/ProjectBody'
+        required: true
+      responses:
+        200:
+          description: successful operation
+
 components:
   schemas:
     NamespaceBody:

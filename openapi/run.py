@@ -15,7 +15,7 @@ from openapi.db.db import db
 from openapi.utils.auth_handle import check_token
 from openapi.db.models.user import User # noqa: F401
 from openapi.db.models.namespace import Namespace # noqa: F401
-# from openapi.db.models.project import Project # noqa: F401
+from openapi.db.models.project import Project # noqa: F401
 # from openapi.db.models.api import Api # noqa: F401
 # from openapi.db.models.component import Component # noqa: F401
 # from openapi.db.models.env import Env # noqa: F401

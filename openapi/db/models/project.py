@@ -23,3 +23,26 @@ class Project(db.Entity):
     info = Optional(Json)
     namespace = Required(Namespace)
 
+    @classmethod
+    @db_session
+    def create(cls, namespace_id, project_content, user):
+        Project(project_content=project_content, user=user, namespace=namespace_id)
+
+
+    @classmethod
+    @db_session
+    def get_project_list_by_namespace_id(cls, namespace_id):
+        print(namespace_id)
+        data = []
+        objs = select(n for n in Project if n.delete_at == None and n.namespace.id == namespace_id
+                      and n.namespace.delete_at == None)
+        for obj in objs:
+            content = obj.project_content
+            tmp_dict = {
+                'id': obj.id,
+                'name': content.get('detail').get('info').get('title'),
+                'description': content.get('detail').get('info').get('description')
+            }
+            data.append(tmp_dict)
+        return data
+

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from openapi.db.models.namespace import Namespace
+from openapi.db.models.project import Project
 from logbook import Logger
 
 log = Logger('service/namespace')
@@ -20,7 +21,11 @@ def namespace_list():
     '''
     :return: 返回namespace的列表
     '''
-    return Namespace.list()
+    datas = Namespace.list()
+    for data in datas:
+        project_data = Project.get_project_list_by_namespace_id(data.get('id'))
+        data['projects'] = project_data
+    return datas
 
 
 def delete_namespace(namespace_id, user):

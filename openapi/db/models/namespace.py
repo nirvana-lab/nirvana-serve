@@ -20,7 +20,7 @@ class Namespace(db.Entity):
     delete_at = Optional(datetime.datetime,  nullable=True)
     user = Required(str)
     info = Optional(Json)
-    # project = Set('Project')
+    project = Set('Project')
 
     @classmethod
     @db_session
@@ -38,7 +38,7 @@ class Namespace(db.Entity):
         for obj in objs:
             tmp_dict = {
                 'id': obj.id,
-                'uid': obj.uid,
+                # 'uid': obj.uid,
                 'namespace': obj.namespace,
                 'description': obj.description
             }
