@@ -141,7 +141,6 @@ paths:
       responses:
         200:
           description: ''
-
   /project:
     post:
       tags:
@@ -171,6 +170,72 @@ paths:
       responses:
         200:
           description: successful operation
+  /project/{project_id}:
+    get:
+      tags:
+      - project
+      summary: 获取指定项目的内容
+      operationId: openapi.api.project.detail
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        description: 项目id
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: 返回项目信息前端传什么返回什么
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/ProjectBody'
+
+    put:
+      tags:
+      - project
+      summary: 更新指定项目的内容
+      operationId: openapi.api.project.update
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        description: 项目id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: 更新项目
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/ProjectBody'
+      responses:
+        200:
+          description: ''
 
 components:
   schemas:

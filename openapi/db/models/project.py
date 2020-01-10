@@ -32,7 +32,6 @@ class Project(db.Entity):
     @classmethod
     @db_session
     def get_project_list_by_namespace_id(cls, namespace_id):
-        print(namespace_id)
         data = []
         objs = select(n for n in Project if n.delete_at == None and n.namespace.id == namespace_id
                       and n.namespace.delete_at == None)
@@ -46,3 +45,26 @@ class Project(db.Entity):
             data.append(tmp_dict)
         return data
 
+
+    @classmethod
+    @db_session
+    def get_project_detail_by_id(cls, namespace_id, project_id):
+        obj = get(n for n in Project if n.id == project_id and n.delete_at == None
+                  and n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            return obj.project_content
+        else:
+            raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')
+
+
+    @classmethod
+    @db_session
+    def update_project_by_id(cls, namespace_id, project_id, project_content, user):
+        obj = get(n for n in Project if n.id == project_id and n.delete_at == None
+                  and n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            obj.user = user
+            obj.update_at = datetime.datetime.utcnow()
+            obj.project_content = project_content
+        else:
+            raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')

@@ -36,11 +36,6 @@ if __name__ == '__main__':
     CORS(app.app)
     app.add_api('openapi.yaml', arguments={'title': 'api'})
     log.info('api.yaml loaded!')
-    # app.add_api('file.yaml', arguments={
-    #     'title': 'file api',
-    #     'url': '/report',
-    #     'version': 'v0.1',
-    # })
     log.info('file.yaml loaded!')
     app.add_error_handler(connexion.ProblemException, problem_exception_handler)
     app.add_error_handler(Exception, exception_handler)
@@ -49,7 +44,9 @@ if __name__ == '__main__':
 
     @app.app.before_request
     def before():
-        if connexion.request.path == '/api/register' or connexion.request.path == '/api/login':
+        if connexion.request.path == '/api/register' or connexion.request.path == '/api/login'\
+                or connexion.request.path == '/api/ui/' or connexion.request.path == '/api/openapi.json'\
+                or connexion.request.path == '/api/ui/favicon-32x32.png':
             pass
         else:
             user = check_token(connexion.request.headers.get('token'))

@@ -13,3 +13,25 @@ def create_project(namespace_id, body, user):
     :return:
     '''
     Project.create(namespace_id, body, user)
+
+
+def project_detail(namespace_id, project_id):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :return: 返回项目详情
+    '''
+    return Project.get_project_detail_by_id(namespace_id, project_id)
+
+
+def update_project(namespace_id, project_id, body, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+    :param body: 更新项目的内容
+    :param user: 操作人
+    :return:
+    '''
+    Project.update_project_by_id(namespace_id, project_id, body, user)
