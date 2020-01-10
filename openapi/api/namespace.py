@@ -24,8 +24,7 @@ def create(body):
     :return: 返回创建成功信息
     '''
     try:
-        user = connexion.request.headers.get('user')
-        namespace = create_namespace(body, user)
+        namespace = create_namespace(body, g.username)
         return {
             'title': f'创建namespace成功',
             'detail': f'创建namespace: {namespace}成功'
