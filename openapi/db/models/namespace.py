@@ -39,7 +39,7 @@ class Namespace(db.Entity):
             tmp_dict = {
                 'id': obj.id,
                 # 'uid': obj.uid,
-                'namespace': obj.namespace,
+                'name': obj.namespace,
                 'description': obj.description
             }
             data.append(tmp_dict)
