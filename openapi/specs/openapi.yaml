@@ -237,6 +237,34 @@ paths:
         200:
           description: ''
 
+    delete:
+      tags:
+      - project
+      summary: 删除项目
+      operationId: openapi.api.project.delete
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        description: 项目id
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: ''
+
 components:
   schemas:
     NamespaceBody:

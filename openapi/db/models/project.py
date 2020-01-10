@@ -68,3 +68,16 @@ class Project(db.Entity):
             obj.project_content = project_content
         else:
             raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')
+
+
+    @classmethod
+    @db_session
+    def delete_project_by_id(cls, namespace_id, project_id, user):
+        print(namespace_id, project_id, user)
+        obj = get(n for n in Project if n.id == project_id and n.delete_at == None and
+                  n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            obj.delete_at = datetime.datetime.utcnow()
+            obj.user = user
+        else:
+            raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')

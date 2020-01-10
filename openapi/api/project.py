@@ -54,3 +54,21 @@ def update(project_id, body):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'更新项目详情异常', detail=f'{e}')
+
+def delete(project_id, ):
+    '''
+    API接口: 删除项目
+    :param project_id: 删除项目的id
+    :return:
+    '''
+    try:
+        namespace_id = connexion.request.headers.get('namespace')
+        project.delete_project(namespace_id, project_id, g.username)
+        return {
+            'title': '删除项目成功',
+            'detail': '删除项目成功'
+        }
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'删除项目详情异常', detail=f'{e}')

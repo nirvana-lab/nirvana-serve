@@ -35,3 +35,13 @@ def update_project(namespace_id, project_id, body, user):
     :return:
     '''
     Project.update_project_by_id(namespace_id, project_id, body, user)
+
+def delete_project(namespace_id, project_id, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: project的id
+     :param user: 操作人
+    :return:
+    '''
+    Project.delete_project_by_id(namespace_id, project_id, user)
