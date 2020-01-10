@@ -45,3 +45,4 @@ def delete_project(namespace_id, project_id, user):
     :return:
     '''
     Project.delete_project_by_id(namespace_id, project_id, user)
+    #test
