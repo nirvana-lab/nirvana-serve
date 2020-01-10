@@ -40,7 +40,8 @@ class Project(db.Entity):
             tmp_dict = {
                 'id': obj.id,
                 'name': content.get('detail').get('info').get('title'),
-                'description': content.get('detail').get('info').get('description')
+                'description': content.get('detail').get('info').get('description'),
+                'tag': content.get('tag')
             }
             data.append(tmp_dict)
         return data
