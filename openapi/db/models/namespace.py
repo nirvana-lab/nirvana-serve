@@ -33,7 +33,7 @@ class Namespace(db.Entity):
     @classmethod
     @db_session
     def list(cls):
-        objs = select(n for n in Namespace if n.delete_at == None).order_by(desc(Namespace.id))
+        objs = select(n for n in Namespace if n.delete_at == None).order_by(Namespace.id)
         data = []
         for obj in objs:
             tmp_dict = {

@@ -34,7 +34,7 @@ class Project(db.Entity):
     def get_project_list_by_namespace_id(cls, namespace_id):
         data = []
         objs = select(n for n in Project if n.delete_at == None and n.namespace.id == namespace_id
-                      and n.namespace.delete_at == None)
+                      and n.namespace.delete_at == None).order_by(Project.id)
         for obj in objs:
             content = obj.project_content
             tmp_dict = {
