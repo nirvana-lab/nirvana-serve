@@ -44,7 +44,6 @@ if __name__ == '__main__':
 
     @app.app.before_request
     def before():
-        print(connexion.request.path)
         if connexion.request.path == '/api/register' or connexion.request.path == '/api/login'\
                 or connexion.request.path == '/api/ui/' or connexion.request.path == '/api/openapi.json'\
                 or connexion.request.path == '/api/ui/favicon-32x32.png'\

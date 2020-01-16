@@ -295,6 +295,16 @@ components:
           properties:
             info:
               type: object
+              required:
+              - title
+              - tag
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                tag:
+                  type: string
             servers:
               type: array
               items:

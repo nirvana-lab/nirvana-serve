@@ -75,7 +75,6 @@ class Project(db.Entity):
     @classmethod
     @db_session
     def delete_project_by_id(cls, namespace_id, project_id, user):
-        print(namespace_id, project_id, user)
         obj = get(n for n in Project if n.id == project_id and n.delete_at == None and
                   n.namespace.id == namespace_id and n.namespace.delete_at == None)
         if obj:
