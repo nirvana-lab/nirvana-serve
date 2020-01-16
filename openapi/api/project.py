@@ -12,10 +12,9 @@ def create(body):
     '''
     try:
         namespace_id = connexion.request.headers.get('namespace')
-        project.create_project(namespace_id, body, g.username)
+        data = project.create_project(namespace_id, body, g.username)
         return {
-            'title': '创建项目成功',
-            'detail': '创建项目成功'
+            'data': data
         }
     except Exception as e:
         raise DefalutError(title=f'创建项目异常', detail=f'{e}')

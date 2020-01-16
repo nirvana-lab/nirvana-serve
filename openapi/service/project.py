@@ -12,8 +12,14 @@ def create_project(namespace_id, body, user):
     :param user: 创建项目的用户
     :return:
     '''
-    Project.create(namespace_id, body, user)
-
+    project = Project.create(namespace_id, body, user)
+    data = {
+        'id': project.id,
+        'name': body.get('detail').get('info').get('title'),
+        'description': body.get('detail').get('info').get('description'),
+        'tag': body.get('tag')
+    }
+    return data
 
 def project_detail(namespace_id, project_id):
     '''
@@ -45,4 +51,3 @@ def delete_project(namespace_id, project_id, user):
     :return:
     '''
     Project.delete_project_by_id(namespace_id, project_id, user)
-    #test

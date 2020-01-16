@@ -26,7 +26,8 @@ class Project(db.Entity):
     @classmethod
     @db_session
     def create(cls, namespace_id, project_content, user):
-        Project(project_content=project_content, user=user, namespace=namespace_id)
+        project = Project(project_content=project_content, user=user, namespace=namespace_id)
+        return project
 
 
     @classmethod
