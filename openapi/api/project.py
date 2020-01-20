@@ -16,6 +16,8 @@ def create(body):
         return {
             'data': data
         }
+    except DefalutError as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}')
     except Exception as e:
         raise DefalutError(title=f'创建项目异常', detail=f'{e}')
 

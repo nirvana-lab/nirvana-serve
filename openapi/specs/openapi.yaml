@@ -349,11 +349,11 @@ components:
         description:
           type: string
         params:
-          type: object
+          type: array
         query:
-          type: object
+          type: array
         header:
-          type: object
+          type: array
         responseBody:
           type: object
           example: {

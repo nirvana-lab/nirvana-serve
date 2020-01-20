@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from openapi.db.models.project import Project
 from logbook import Logger
+from openapi.utils.exception_handle import DefalutError
 
 log = Logger('service/project')
 
@@ -12,12 +13,15 @@ def create_project(namespace_id, body, user):
     :param user: 创建项目的用户
     :return:
     '''
+    tag = body.get('tag')
+    if '$' in tag:
+        raise DefalutError(title='tag中不能包含字符$', detail=f'tag为{tag}')
     project = Project.create(namespace_id, body, user)
     data = {
         'id': project.id,
         'name': body.get('detail').get('info').get('title'),
         'description': body.get('detail').get('info').get('description'),
-        'tag': body.get('tag')
+        'tag': tag
     }
     return data
 
