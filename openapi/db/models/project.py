@@ -82,3 +82,18 @@ class Project(db.Entity):
             obj.user = user
         else:
             raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')
+
+
+    @classmethod
+    @db_session
+    def rename_project_by_id(cls, namespace_id, project_id, new_name, user):
+        obj = get(n for n in Project if n.id == project_id and n.delete_at == None
+                  and n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            content = obj.project_content
+            content['detail']['info']['title'] = new_name
+            obj.project_content = content
+            obj.user = user
+            obj.update_at = datetime.datetime.utcnow()
+        else:
+            raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')

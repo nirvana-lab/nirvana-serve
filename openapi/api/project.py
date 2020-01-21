@@ -56,7 +56,7 @@ def update(project_id, body):
     except Exception as e:
         raise DefalutError(title=f'更新项目详情异常', detail=f'{e}')
 
-def delete(project_id, ):
+def delete(project_id):
     '''
     API接口: 删除项目
     :param project_id: 删除项目的id
@@ -73,3 +73,22 @@ def delete(project_id, ):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'删除项目详情异常', detail=f'{e}')
+
+def rename(project_id, body):
+    '''
+    API接口：重命名项目名
+    :param project_id: 项目的id
+    :param body: 项目重命名的内容
+    :return:
+    '''
+    try:
+        namespace_id = connexion.request.headers.get('namespace')
+        project.project_rename_by_id(namespace_id, project_id, body, g.username)
+        return {
+            'title': '项目重命名成功',
+            'detail': '项目重命名成功'
+        }
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'项目名重命名异常', detail=f'{e}')

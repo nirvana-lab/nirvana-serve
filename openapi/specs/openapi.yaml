@@ -265,6 +265,43 @@ paths:
         200:
           description: ''
 
+  /project/{project_id}/name:
+    put:
+      tags:
+      - project
+      summary: 修改项目的名字
+      operationId: openapi.api.project.rename
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        description: 项目id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: 更新项目的名字
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        200:
+          description: ''
 components:
   schemas:
     NamespaceBody:
@@ -349,11 +386,11 @@ components:
         description:
           type: string
         params:
-          type: array
+          type: object
         query:
-          type: array
+          type: object
         header:
-          type: array
+          type: object
         responseBody:
           type: object
           example: {
