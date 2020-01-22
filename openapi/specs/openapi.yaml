@@ -336,6 +336,7 @@ components:
       properties:
         detail:
           type: object
+          description: 描述
           properties:
             info:
               type: object
@@ -374,6 +375,8 @@ components:
             type: object
         tag:
           type: string
+        commit:
+          type: string
     ApiBody:
       type: object
       properties:
@@ -386,11 +389,20 @@ components:
         description:
           type: string
         params:
-          type: object
+          type: array
+          nullable: true
+          items:
+            type: object
         query:
-          type: object
+          type: array
+          nullable: true
+          items:
+            type: object
         header:
-          type: object
+          type: array
+          nullable: true
+          items:
+            type: object
         responseBody:
           type: object
           example: {
