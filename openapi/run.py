@@ -26,8 +26,8 @@ from openapi.db.models.project import Project # noqa: F401
 # from openapi.db.models.task import Task
 # from openapi.db.models.task_histroy import TaskHistory
 
-from flask import Flask
-from flask_socketio import SocketIO
+# from flask import Flask
+# from flask_socketio import SocketIO
 
 if __name__ == '__main__':
     setup_logger()
@@ -60,6 +60,5 @@ if __name__ == '__main__':
 
     app.run(host='0.0.0.0', debug=True)
 
-    socket_app = Flask(__name__)
-    socketio = SocketIO(socket_app)
-    
+    # socket_app = Flask(__name__)
+    # socketio = SocketIO(socket_app)
