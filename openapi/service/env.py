@@ -19,5 +19,21 @@ def create_env(namespace_id, body, user):
 
     Env.create(namespace_id, env, url, description, user)
 
+
 def env_list(namespace_id):
     return Env.list(namespace_id)
+
+
+def update_env(namespace_id, env_id, body, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param env_id: env的id
+    :param body: 更新环境的body
+    :param user: 更新环境的用户
+    :return:
+    '''
+    env = body.get('env')
+    url = body.get('url')
+    description = body.get('description')
+    Env.update(namespace_id, env_id, env, url, description, user)

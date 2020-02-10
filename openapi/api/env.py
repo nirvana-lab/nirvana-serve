@@ -34,3 +34,26 @@ def create(body):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'创建环境异常', detail=f'{e}')
+
+def update(env_id, body):
+    '''
+    API接口: 更新环境内容
+    :param body: 更新环境内容的body
+    :return:
+    '''
+    try:
+        namespace_id = connexion.request.headers.get('namespace')
+        env.update_env(namespace_id, env_id, body, g.username)
+        return {
+            'title': '更新环境成功'
+        }
+    except IsExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'更新环境异常', detail=f'{e}')
+
+
+def delete(env_id):
+    pass

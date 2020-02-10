@@ -386,6 +386,57 @@ paths:
       responses:
         200:
           description: ''
+
+  /envs/{env_id}:
+    put:
+      summary: 修改环境
+      description: 修改环境内容
+      operationId: openapi.api.env.update
+      tags:
+      - env
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: env_id
+        description: 环境id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                env:
+                  type: string
+                url:
+                  type: string
+                description:
+                  type: string
+              required:
+              - env
+              - url
+      responses:
+        200:
+          description: ''
+
 components:
   schemas:
     NamespaceBody:

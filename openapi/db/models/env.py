@@ -51,3 +51,23 @@ class Env(db.Entity):
             }
             data.append(tmp_dict)
         return data
+
+
+    @classmethod
+    @db_session
+    def update(cls, namespace_id, env_id, env, url, description, user):
+        obj = get(n for n in Env if n.env == env and n.delete_at == None and
+                  n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            raise IsExist(title='修改的环境名已经存在', detail=f'{env}已经存在, uuid为{obj.uid}')
+
+        obj = get(n for n in Env if n.id == env_id and n.delete_at == None and
+                  n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            obj.env = env
+            obj.url = url
+            obj.description = description
+            obj.update = datetime.datetime.utcnow()
+            obj.user = user
+        else:
+            raise IsNotExist(title='修改的环境不存在', detail=f'id为{env_id}的环境不存在')
