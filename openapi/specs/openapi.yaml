@@ -302,6 +302,90 @@ paths:
       responses:
         200:
           description: ''
+
+  /envs:
+    get:
+      summary: 获取环境列表
+      description: 获取环境列表
+      operationId: openapi.api.env.list
+      tags:
+      - env
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: 返回环境列表
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    description:
+                      type: string
+                    env:
+                      type: string
+                    id:
+                      type: string
+
+    post:
+      summary: 创建环境
+      description: 创建环境
+      operationId: openapi.api.env.create
+      tags:
+      - env
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                env:
+                  type: string
+                url:
+                  type: string
+                description:
+                  type: string
+              required:
+              - env
+              - url
+      responses:
+        200:
+          description: ''
 components:
   schemas:
     NamespaceBody:
@@ -404,16 +488,6 @@ components:
           items:
             type: object
         responseBody:
-          type: object
-          example: {
-            name: '123'
-          }
-        responseBodyType:
-          type: object
-          example: {
-            name: string
-          }
-        requestBody:
           type: array
           items:
             type: object
@@ -422,6 +496,8 @@ components:
               description: '',
               data: {},
             }
+        requestBody:
+          type: string
     PutProjectBody:
       type: object
       properties:

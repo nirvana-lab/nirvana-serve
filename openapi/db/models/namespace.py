@@ -21,6 +21,7 @@ class Namespace(db.Entity):
     user = Required(str)
     info = Optional(Json)
     project = Set('Project')
+    env = Set('Env')
 
     @classmethod
     @db_session
