@@ -34,3 +34,20 @@ class Env(db.Entity):
         else:
             obj = Env(env=env, description=description, user=user, namespace=namespace_id, url=url)
             return obj
+
+
+    @classmethod
+    @db_session
+    def list(cls, namespace_id):
+        objs = select(n for n in Env if n.namespace.id == namespace_id and n.namespace.delete_at == None
+                      and n.delete_at == None).order_by(Env.id)
+        data = []
+        for obj in objs:
+            tmp_dict = {
+                'id': obj.id,
+                'name': obj.env,
+                'url': obj.url,
+                'description': obj.description
+            }
+            data.append(tmp_dict)
+        return data

@@ -5,8 +5,18 @@ from openapi.utils.exception_handle import DefalutError, IsExist, IsNotExist
 from flask import g
 
 def list():
-
-    pass
+    '''
+    API接口：或者指定namespace下的环境列表
+    :return: 环境列表
+    '''
+    try:
+        namespace_id = connexion.request.headers.get('namespace')
+        data = env.env_list(namespace_id)
+        return {
+            'data': data
+        }
+    except Exception as e:
+        raise DefalutError(title=f'获取环境列表异常', detail=f'{e}')
 
 def create(body):
     '''

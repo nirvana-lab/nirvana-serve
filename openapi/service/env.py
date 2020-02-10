@@ -18,3 +18,6 @@ def create_env(namespace_id, body, user):
     description = body.get('description')
 
     Env.create(namespace_id, env, url, description, user)
+
+def env_list(namespace_id):
+    return Env.list(namespace_id)
