@@ -28,7 +28,7 @@ def update_env(namespace_id, env_id, body, user):
     '''
 
     :param namespace_id: namespace的id
-    :param env_id: env的id
+    :param env_id: namespace的id
     :param body: 更新环境的body
     :param user: 更新环境的用户
     :return:
@@ -37,3 +37,14 @@ def update_env(namespace_id, env_id, body, user):
     url = body.get('url')
     description = body.get('description')
     Env.update(namespace_id, env_id, env, url, description, user)
+
+
+def delet_env(namespace_id, env_id, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param env_id: env的id
+    :param user: 删除环境的用户
+    :return:
+    '''
+    Env.delete(namespace_id, env_id, user)

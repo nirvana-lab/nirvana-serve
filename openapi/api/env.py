@@ -56,4 +56,18 @@ def update(env_id, body):
 
 
 def delete(env_id):
-    pass
+    '''
+    API接口： 删除指定的环境
+    :param env_id: 被删除环境的id
+    :return:
+    '''
+    try:
+        namespace_id = connexion.request.headers.get('namespace')
+        env.delet_env(namespace_id, env_id, g.username)
+        return {
+            'title': '删除环境成功'
+        }
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'删除环境异常', detail=f'{e}')

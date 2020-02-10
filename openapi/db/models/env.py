@@ -67,7 +67,18 @@ class Env(db.Entity):
             obj.env = env
             obj.url = url
             obj.description = description
-            obj.update = datetime.datetime.utcnow()
+            obj.update_at = datetime.datetime.utcnow()
             obj.user = user
         else:
             raise IsNotExist(title='修改的环境不存在', detail=f'id为{env_id}的环境不存在')
+
+    @classmethod
+    @db_session
+    def delete(cls, namespace_id, env_id, user):
+        obj = get(n for n in Env if n.id == env_id and n.delete_at == None and
+                  n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            obj.delete_at = datetime.datetime.utcnow()
+            obj.user = user
+        else:
+            raise IsNotExist(title='删除的环境不存在', detail=f'id为{env_id}的环境不存在')

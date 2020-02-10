@@ -437,6 +437,43 @@ paths:
         200:
           description: ''
 
+    delete:
+      summary: 删除环境
+      description: 根据环境id删除环境
+      operationId: openapi.api.env.delete
+      tags:
+      - env
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      - name: env_id
+        description: 环境id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: ''
+
+
+
 components:
   schemas:
     NamespaceBody:
