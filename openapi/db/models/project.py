@@ -20,6 +20,7 @@ class Project(db.Entity):
     create_at = Required(datetime.datetime, default=datetime.datetime.utcnow(), index=True)
     update_at = Required(datetime.datetime, default=datetime.datetime.utcnow(), index=True)
     delete_at = Optional(datetime.datetime,  nullable=True)
+    swagger_json = Optional(Json, nullable=True)
     info = Optional(Json)
     namespace = Required(Namespace)
 
@@ -29,6 +30,10 @@ class Project(db.Entity):
         project = Project(project_content=project_content, user=user, namespace=namespace_id)
         return project
 
+    @classmethod
+    @db_session
+    def create_by_swagger(cls, namespace_id, project_content, swagger_json, user):
+        Project(project_content=project_content, swagger_json=swagger_json, user=user, namespace=namespace_id)
 
     @classmethod
     @db_session

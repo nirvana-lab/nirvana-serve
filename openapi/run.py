@@ -49,7 +49,8 @@ if __name__ == '__main__':
         if connexion.request.path == '/api/register' or connexion.request.path == '/api/login'\
                 or connexion.request.path == '/api/ui/' or connexion.request.path == '/api/openapi.json'\
                 or connexion.request.path == '/api/ui/favicon-32x32.png'\
-                or connexion.request.path == '/favicon.ico' or '/api/ui/' in connexion.request.path:
+                or connexion.request.path == '/favicon.ico' or '/api/ui/' in connexion.request.path \
+                or '/api/mock' in connexion.request.path:
             pass
         else:
             user = check_token(connexion.request.headers.get('token'))

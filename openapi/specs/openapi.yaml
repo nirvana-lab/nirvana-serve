@@ -472,6 +472,74 @@ paths:
         200:
           description: ''
 
+  /swagger_import:
+    post:
+      summary: 通过url导入swagger文档
+      description: 通过给的url路径获取swagger的json文件，导入平台
+      operationId: openapi.api.swagger.url
+      tags:
+      - import
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - description: 操作人
+        in: header
+        name: user
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - url
+              properties:
+                url:
+                  type: string
+
+      responses:
+        200:
+          description: ''
+
+
+  /mock/{namespace_id}/{project_id}/{path}:
+    post:
+      summary: 修改环境
+      description: 修改环境内容
+      operationId: openapi.api.mock.post
+      tags:
+      - mock
+      parameters:
+      - name: namespace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: path
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: ''
+
 
 
 components:
