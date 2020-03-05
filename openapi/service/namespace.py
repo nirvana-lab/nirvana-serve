@@ -39,3 +39,16 @@ def delete_namespace(namespace_id, user):
     :return:
     '''
     Namespace.delete_namespace_by_id(namespace_id, user)
+
+
+def get_namespace_detail_by_id(namespace_id):
+    '''
+
+    :param namespace_id: 被指定的namespace
+    :return:
+    '''
+    datas = Namespace.get_namespace_detail_by_id(namespace_id)
+    for data in datas:
+        project_data = Project.get_project_list_by_namespace_id(data.get('id'))
+        data['projects'] = project_data
+    return datas

@@ -56,3 +56,17 @@ class Namespace(db.Entity):
             obj.user = user
         else:
             raise IsNotExist(title='Namespace不存在', detail=f'id为{namespace_id}的接口不存在')
+
+
+    @classmethod
+    @db_session
+    def get_namespace_detail_by_id(cls, namespace_id):
+        obj = get(n for n in Namespace if n.delete_at == None and n.id == namespace_id)
+        if obj:
+            return [{
+                'id': obj.id,
+                'name': obj.namespace,
+                'description': obj.description
+            }]
+        else:
+            raise IsNotExist(title='查询的namespace不存在', detail=f'namespace_id为{namespace_id}的namespace不存在')

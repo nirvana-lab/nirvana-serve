@@ -124,7 +124,31 @@ paths:
       responses:
         200:
           description: ''
+
   /namespaces/{namespace_id}:
+    get:
+      tags:
+      - namespaces
+      summary: 获取指定namespace下的项目的内容
+      operationId: openapi.api.namespace.detail
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace_id
+        in: path
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: ''
+
+
     delete:
       tags:
       - namespaces
