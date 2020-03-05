@@ -89,6 +89,11 @@ paths:
         required: true
         schema:
           type: string
+      - name: project
+        in: query
+        description: 返回内容中是否需要有项目内容
+        schema:
+          type: string
       responses:
         '200':
           description: 返回namespace和project的聚合结构

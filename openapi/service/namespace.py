@@ -17,14 +17,17 @@ def create_namespace(body, user):
     return namespace
 
 
-def namespace_list():
+def namespace_list(is_include_project):
     '''
+    :param is_include_project: 返回内容是否需要包含项目内容
     :return: 返回namespace的列表
     '''
     datas = Namespace.list()
-    for data in datas:
-        project_data = Project.get_project_list_by_namespace_id(data.get('id'))
-        data['projects'] = project_data
+
+    if is_include_project == "True":
+        for data in datas:
+            project_data = Project.get_project_list_by_namespace_id(data.get('id'))
+            data['projects'] = project_data
     return datas
 
 

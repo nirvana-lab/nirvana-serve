@@ -4,13 +4,14 @@ from openapi.service.namespace import create_namespace, namespace_list, delete_n
 from openapi.utils.exception_handle import DefalutError, IsExist, IsNotExist
 from flask import g
 
-def list():
+def list(project="True"):
     '''
     API接口: 获取namesapce的列表
+    :param project: 根据project来判断返回接口是否需要显示项目的具体内容，默认为需要显示
     :return: 返回namespace的列表
     '''
     try:
-        data = namespace_list()
+        data = namespace_list(is_include_project=project)
         return {
             'data': data
         }, 200
