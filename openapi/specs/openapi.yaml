@@ -299,6 +299,48 @@ paths:
               properties:
                 name:
                   type: string
+              required:
+              - name
+      responses:
+        200:
+          description: ''
+
+  /project/{project_id}/tag:
+    put:
+      tags:
+      - project
+      summary: 修改项目所属的tag（目录的名字）
+      operationId: openapi.api.project.retag
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        description: 项目id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: 更新tag的内容
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tag:
+                  type: string
+              required:
+              - tag
       responses:
         200:
           description: ''

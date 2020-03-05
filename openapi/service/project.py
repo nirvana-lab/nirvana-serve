@@ -69,3 +69,15 @@ def project_rename_by_id(namespace_id, project_id, body, user):
     '''
     new_name = body.get('name')
     Project.rename_project_by_id(namespace_id, project_id, new_name, user)
+
+def project_retag_by_id(namespace_id, project_id, body, user):
+    '''
+
+    :param namespace_id: namespace的id
+    :param project_id: 项目的id
+    :param body:  tag命名的内容
+    :param user: 操作人
+    :return:
+    '''
+    new_tag = body.get('tag')
+    Project.retag_project_by_id(namespace_id, project_id, new_tag, user)
