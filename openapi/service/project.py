@@ -58,6 +58,20 @@ def delete_project(namespace_id, project_id, user):
     Project.delete_project_by_id(namespace_id, project_id, user)
 
 
+def deltet_projects_by_ids_list(namrspace_id, project_ids, user):
+    '''
+    
+    :param namrspace_id: namespace的id
+    :param project_ids: 删除project的id列表
+    :param user: 操作人
+    :return: 
+    '''
+    project_ids_list = project_ids.split(',')
+    for id in project_ids_list:
+        Project.delete_project_by_id(namrspace_id, id, user)
+
+
+
 def project_rename_by_id(namespace_id, project_id, body, user):
     '''
 
@@ -70,6 +84,7 @@ def project_rename_by_id(namespace_id, project_id, body, user):
     new_name = body.get('name')
     Project.rename_project_by_id(namespace_id, project_id, new_name, user)
 
+
 def project_retag_by_id(namespace_id, project_id, body, user):
     '''
 
@@ -81,3 +96,16 @@ def project_retag_by_id(namespace_id, project_id, body, user):
     '''
     new_tag = body.get('tag')
     Project.retag_project_by_id(namespace_id, project_id, new_tag, user)
+
+
+def project_retags_by_ids(namespace_id, body, user):
+    """
+
+    :param namespace_id: namespace的id
+    :param body: 修改retags的内容
+    :param user: 操作这
+    :return:
+    """
+    for item in body:
+        Project.retag_project_by_id(namespace_id, item.get('id'), item.get('tag'), user)
+

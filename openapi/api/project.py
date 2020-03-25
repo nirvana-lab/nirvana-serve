@@ -74,6 +74,24 @@ def delete(project_id):
     except Exception as e:
         raise DefalutError(title=f'删除项目详情异常', detail=f'{e}')
 
+def deletes(ids):
+    '''
+
+    :param ids: 删除项目id的列表
+    :return:
+    '''
+    try:
+        namespace_id = connexion.request.headers.get('namespace')
+        project.deltet_projects_by_ids_list(namespace_id, ids, g.username)
+        return {
+            'title': '删除项目成功',
+            'detail': '删除项目成功'
+        }
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'删除多个项目异常', detail=f'{e}')
+
 def rename(project_id, body):
     '''
     API接口：重命名项目名
@@ -111,3 +129,23 @@ def retag(project_id, body):
         raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
     except Exception as e:
         raise DefalutError(title=f'Tag重命名异常', detail=f'{e}')
+
+
+def retags(body):
+    '''
+
+    :param body: 批量更新tags
+    :return:
+    '''
+    try:
+        namespace_id = connexion.request.headers.get('namespace')
+        print(body)
+        project.project_retags_by_ids(namespace_id, body, g.username)
+        return {
+            'title': 'Tag命名成功',
+            'detail': 'Tag重命名成功'
+        }
+    except IsNotExist as e:
+        raise DefalutError(title=f'{e.title}', detail=f'{e.detail}', type=f'{e.type}')
+    except Exception as e:
+        raise DefalutError(title=f'批量Tag重命名异常', detail=f'{e}')

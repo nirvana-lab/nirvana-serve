@@ -65,17 +65,23 @@ def swagger_json_change_to_nirvana_json(swagger_json):
 
     tmp_data = copy.deepcopy(nirvana_json_format)
 
-    tmp_data['detail']['info'] = swagger_info
-    tmp_data['detail']['servers'] = swagger_servers
-    tmp_data['detail']['tags'] = swagger_tags
+    if swagger_info:
+        tmp_data['detail']['info'] = swagger_info
+    if swagger_servers:
+        tmp_data['detail']['servers'] = swagger_servers
+    if swagger_tags:
+        tmp_data['detail']['tags'] = swagger_tags
 
     swagger_paths = swagger_json.get('paths')
     tmp_data['apis'] = paths_change(swagger_paths)
-    swagger_components = swagger_json.get('components').get('schemas')
-    if swagger_components:
-        swagger_components_fix_ref = ref_format(swagger_components)
-        model_list = model_change(swagger_components_fix_ref)
-        tmp_data['models'] = model_list
+    try:
+        swagger_components = swagger_json.get('components').get('schemas')
+        if swagger_components:
+            swagger_components_fix_ref = ref_format(swagger_components)
+            model_list = model_change(swagger_components_fix_ref)
+            tmp_data['models'] = model_list
+    except:
+        pass
     return tmp_data
 
 def paths_change(swagger_paths):
@@ -94,6 +100,8 @@ def paths_change(swagger_paths):
             }
             tmp_dict['path'] = path
             tmp_dict['method'] = method
+            print(path)
+            print(method)
             if 'tags' in swagger_paths[path][method].keys():
                 tmp_dict['tags'] = swagger_paths[path][method]['tags']
             if 'summary' in swagger_paths[path][method].keys():
@@ -139,9 +147,13 @@ def paths_change(swagger_paths):
                     if 'description' in swagger_paths[path][method]['responses'][k]:
                         tmp_response_dict['description'] = v.get('description')
                     if 'content' in swagger_paths[path][method]['responses'][k]:
-                        responses_content = v.get('content').get('application/json').get('schema')
-                        responses_content_fix_ref = ref_format(responses_content)
-                        tmp_response_dict['content'] = yaml.safe_dump(responses_content_fix_ref, default_flow_style=False, allow_unicode=True)
+                        for content_k, content_v in v.get('content').items():
+                            if content_k == 'application/json':
+                                responses_content = v.get('content').get('application/json').get('schema')
+                                responses_content_fix_ref = ref_format(responses_content)
+                                tmp_response_dict['content'] = yaml.safe_dump(responses_content_fix_ref, default_flow_style=False, allow_unicode=True)
+                            elif 'text/plain' in content_k:
+                                tmp_response_dict['content'] = v.get('content').get(content_k).get('schema')
                     response_list.append(tmp_response_dict)
                 if response_list:
                     tmp_dict['responseBody'] = response_list

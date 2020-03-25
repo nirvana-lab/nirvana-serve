@@ -167,6 +167,7 @@ paths:
         required: true
         schema:
           type: string
+
       responses:
         200:
           description: ''
@@ -199,6 +200,72 @@ paths:
       responses:
         200:
           description: successful operation
+
+  /projects/{ids}:
+    delete:
+      tags:
+      - project
+      summary: 批量删除项目
+      operationId: openapi.api.project.deletes
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - name: ids
+        in: path
+        description: 要被删除目标列表
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+
+  /projects/tags:
+    put:
+      tags:
+      - project
+      summary: 批量更新tags
+      operationId: openapi.api.project.retags
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: 重新名tag的字典
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  tag:
+                    type: string
+      responses:
+        200:
+          description: successful operation
+
   /project/{project_id}:
     get:
       tags:
