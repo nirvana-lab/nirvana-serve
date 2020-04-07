@@ -132,7 +132,13 @@ def paths_change(swagger_paths):
                 if tmp_path_list:
                     tmp_dict['params'] = tmp_path_list
             if 'requestBody' in swagger_paths[path][method].keys():
-                requsetBody_content = swagger_paths[path][method].get('requestBody').get('content').get('application/json').get('schema')
+                if 'application/json' in swagger_paths[path][method].get('requestBody').get('content').keys():
+                    requsetBody_content = swagger_paths[path][method].get('requestBody').get('content').get('application/json').get('schema')
+                elif 'multipart/form-data' in swagger_paths[path][method].get('requestBody').get('content').keys():
+                    requsetBody_content = swagger_paths[path][method].get('requestBody').get('content').get(
+                        'multipart/form-data').get('schema')
+                else:
+                    requsetBody_content = None
                 requestBody_content_fix_ref = ref_format(requsetBody_content)
 
                 tmp_dict['requestBody'] = yaml.safe_dump(requestBody_content_fix_ref, default_flow_style=False, allow_unicode=True)
