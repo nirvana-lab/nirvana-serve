@@ -100,70 +100,71 @@ def paths_change(swagger_paths):
                 'requestBody': '',
                 'responseBody': []
             }
-            tmp_dict['path'] = path
-            tmp_dict['method'] = method
-            if 'tags' in swagger_paths[path][method].keys():
-                tmp_dict['tags'] = swagger_paths[path][method]['tags']
-            if 'summary' in swagger_paths[path][method].keys():
-                tmp_dict['description'] = swagger_paths[path][method]['summary']
-            if 'parameters' in swagger_paths[path][method].keys():
-                tmp_query_list = []
-                tmp_header_list = []
-                tmp_path_list = []
+            if method in ['get', 'post', 'put', 'delete']:
+                tmp_dict['path'] = path
+                tmp_dict['method'] = method
+                if 'tags' in swagger_paths[path][method].keys():
+                    tmp_dict['tags'] = swagger_paths[path][method]['tags']
+                if 'summary' in swagger_paths[path][method].keys():
+                    tmp_dict['description'] = swagger_paths[path][method]['summary']
+                if 'parameters' in swagger_paths[path][method].keys():
+                    tmp_query_list = []
+                    tmp_header_list = []
+                    tmp_path_list = []
 
-                for param in swagger_paths[path][method]['parameters']:
-                    tmp_param_dict = {}
-                    tmp_param_dict['key'] = param.get('name')
-                    tmp_param_dict['type'] = param.get('schema').get('type')
-                    tmp_param_dict['value'] = param.get('value')
-                    tmp_param_dict['require'] = param.get('required')
-                    tmp_param_dict['description'] = param.get('description')
+                    for param in swagger_paths[path][method]['parameters']:
+                        tmp_param_dict = {}
+                        tmp_param_dict['key'] = param.get('name')
+                        tmp_param_dict['type'] = param.get('schema').get('type')
+                        tmp_param_dict['value'] = param.get('value')
+                        tmp_param_dict['require'] = param.get('required')
+                        tmp_param_dict['description'] = param.get('description')
 
-                    if param['in'] == 'header':
-                        tmp_header_list.append(tmp_param_dict)
-                    elif param['in'] == 'query':
-                        tmp_query_list.append(tmp_param_dict)
-                    elif param['in'] == 'path':
-                        tmp_path_list.append(tmp_param_dict)
-                if tmp_query_list:
-                    tmp_dict['query'] = tmp_query_list
-                if tmp_header_list:
-                    tmp_dict['header'] = tmp_header_list
-                if tmp_path_list:
-                    tmp_dict['params'] = tmp_path_list
-            if 'requestBody' in swagger_paths[path][method].keys():
-                if 'application/json' in swagger_paths[path][method].get('requestBody').get('content').keys():
-                    requsetBody_content = swagger_paths[path][method].get('requestBody').get('content').get('application/json').get('schema')
-                elif 'multipart/form-data' in swagger_paths[path][method].get('requestBody').get('content').keys():
-                    requsetBody_content = swagger_paths[path][method].get('requestBody').get('content').get(
-                        'multipart/form-data').get('schema')
-                else:
-                    requsetBody_content = None
-                requestBody_content_fix_ref = ref_format(requsetBody_content)
+                        if param['in'] == 'header':
+                            tmp_header_list.append(tmp_param_dict)
+                        elif param['in'] == 'query':
+                            tmp_query_list.append(tmp_param_dict)
+                        elif param['in'] == 'path':
+                            tmp_path_list.append(tmp_param_dict)
+                    if tmp_query_list:
+                        tmp_dict['query'] = tmp_query_list
+                    if tmp_header_list:
+                        tmp_dict['header'] = tmp_header_list
+                    if tmp_path_list:
+                        tmp_dict['params'] = tmp_path_list
+                if 'requestBody' in swagger_paths[path][method].keys():
+                    if 'application/json' in swagger_paths[path][method].get('requestBody').get('content').keys():
+                        requsetBody_content = swagger_paths[path][method].get('requestBody').get('content').get('application/json').get('schema')
+                    elif 'multipart/form-data' in swagger_paths[path][method].get('requestBody').get('content').keys():
+                        requsetBody_content = swagger_paths[path][method].get('requestBody').get('content').get(
+                            'multipart/form-data').get('schema')
+                    else:
+                        requsetBody_content = None
+                    requestBody_content_fix_ref = ref_format(requsetBody_content)
 
-                tmp_dict['requestBody'] = yaml.safe_dump(requestBody_content_fix_ref, default_flow_style=False, allow_unicode=True)
-            if 'responses' in swagger_paths[path][method].keys():
-                response_list = []
-                for k, v in swagger_paths[path][method]['responses'].items():
-                    tmp_response_dict = {
-                        'code': k,
-                        'description': None,
-                        'content': None
-                    }
-                    if 'description' in swagger_paths[path][method]['responses'][k]:
-                        tmp_response_dict['description'] = v.get('description')
-                    if 'content' in swagger_paths[path][method]['responses'][k]:
-                        for content_k, content_v in v.get('content').items():
-                            if content_k == 'application/json':
-                                responses_content = v.get('content').get('application/json').get('schema')
-                                responses_content_fix_ref = ref_format(responses_content)
-                                tmp_response_dict['content'] = yaml.safe_dump(responses_content_fix_ref, default_flow_style=False, allow_unicode=True)
-                            elif 'text/plain' in content_k:
-                                tmp_response_dict['content'] = v.get('content').get(content_k).get('schema')
-                    response_list.append(tmp_response_dict)
-                if response_list:
-                    tmp_dict['responseBody'] = response_list
-            tmp_list.append(tmp_dict)
+                    tmp_dict['requestBody'] = yaml.safe_dump(requestBody_content_fix_ref, default_flow_style=False, allow_unicode=True)
+                if 'responses' in swagger_paths[path][method].keys():
+                    response_list = []
+                    for k, v in swagger_paths[path][method]['responses'].items():
+                        tmp_response_dict = {
+                            'code': k,
+                            'description': None,
+                            'content': None
+                        }
+                        if 'description' in swagger_paths[path][method]['responses'][k]:
+                            tmp_response_dict['description'] = v.get('description')
+                        if 'content' in swagger_paths[path][method]['responses'][k]:
+                            for content_k, content_v in v.get('content').items():
+                                if content_k == 'application/json':
+                                    responses_content = v.get('content').get('application/json').get('schema')
+                                    responses_content_fix_ref = ref_format(responses_content)
+                                    tmp_response_dict['content'] = yaml.safe_dump(responses_content_fix_ref, default_flow_style=False, allow_unicode=True)
+                                elif 'text/plain' in content_k:
+                                    tmp_response_dict['content'] = v.get('content').get(content_k).get('schema')
+                        response_list.append(tmp_response_dict)
+                    if response_list:
+                        tmp_dict['responseBody'] = response_list
+                tmp_list.append(tmp_dict)
     return tmp_list
 
 
