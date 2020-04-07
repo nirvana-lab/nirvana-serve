@@ -32,8 +32,22 @@ class Project(db.Entity):
 
     @classmethod
     @db_session
-    def create_by_swagger(cls, namespace_id, project_content, swagger_json, user):
-        Project(project_content=project_content, swagger_json=swagger_json, user=user, namespace=namespace_id)
+    def create_by_swagger(cls, namespace_id, project_content, swagger_json, user, url):
+        Project(project_content=project_content, swagger_json=swagger_json, user=user, namespace=namespace_id, info={"url": url})
+
+
+    @classmethod
+    @db_session
+    def sync_swagger_by_id(cls, namespace_id, project_content, swagger_json, user, project_id):
+        obj = get(n for n in Project if n.delete_at == None and n.id == project_id and
+                  n.namespace.id == namespace_id and n.namespace.delete_at == None)
+        if obj:
+            obj.project_content = project_content
+            obj.swagger_json = swagger_json
+            obj.user= user
+            obj.update_at = datetime.datetime.utcnow()
+        else:
+            raise IsNotExist(title='项目不存在', detail=f'id为{project_id}的项目不存在')
 
     @classmethod
     @db_session
@@ -107,7 +121,6 @@ class Project(db.Entity):
     @classmethod
     @db_session
     def retag_project_by_id(cls, namespace_id, project_id, new_tag, user):
-        print(project_id)
         obj = get(n for n in Project if n.id == project_id and n.delete_at == None
                   and n.namespace.id == namespace_id and n.namespace.delete_at == None)
         if obj:

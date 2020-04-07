@@ -33,7 +33,9 @@ def import_swagger_by_url(namespace_id, body, user):
     except Exception as e:
         raise DefalutError(title='获取swagger_json失败', detail=f'{e}')
     nirvana_json = swagger_json_change_to_nirvana_json(swagger_content)
-    Project.create_by_swagger(namespace_id, nirvana_json, swagger_content, user)
+    if body.get('tag'):
+        nirvana_json['tag'] = body.get('tag')
+    Project.create_by_swagger(namespace_id, nirvana_json, swagger_content, user, url)
 
 
 def check_swagger_type(content):
@@ -100,8 +102,6 @@ def paths_change(swagger_paths):
             }
             tmp_dict['path'] = path
             tmp_dict['method'] = method
-            print(path)
-            print(method)
             if 'tags' in swagger_paths[path][method].keys():
                 tmp_dict['tags'] = swagger_paths[path][method]['tags']
             if 'summary' in swagger_paths[path][method].keys():

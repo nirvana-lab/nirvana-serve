@@ -15,6 +15,8 @@ tags:
   name: namespaces
 - description: everything about project
   name: project
+- description: everything about swagger
+  name: swagger
 
 
 paths:
@@ -616,7 +618,7 @@ paths:
       description: 通过给的url路径获取swagger的json文件，导入平台
       operationId: openapi.api.swagger.url
       tags:
-      - import
+      - swagger
       parameters:
       - name: token
         in: header
@@ -630,12 +632,6 @@ paths:
         required: true
         schema:
           type: string
-      - description: 操作人
-        in: header
-        name: user
-        schema:
-          type: string
-        required: true
       requestBody:
         content:
           application/json:
@@ -646,6 +642,36 @@ paths:
                 url:
                   type: string
 
+      responses:
+        200:
+          description: ''
+
+  /swagger/{project_id}/sync:
+    get:
+      summary: 同步swagger文档
+      description: 同步指定的swagger文档
+      operationId: openapi.api.swagger.sync
+      tags:
+      - swagger
+      parameters:
+      - name: token
+        in: header
+        description: 用户token令牌
+        required: true
+        schema:
+          type: string
+      - name: namespace
+        in: header
+        description: 命名空间id
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        description: 项目id
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: ''
@@ -677,8 +703,6 @@ paths:
       responses:
         200:
           description: ''
-
-
 
 components:
   schemas:
