@@ -157,6 +157,11 @@ def paths_change(swagger_paths):
                             for content_k, content_v in v.get('content').items():
                                 if content_k == 'application/json':
                                     responses_content = v.get('content').get('application/json').get('schema')
+
+                                    # 判断导入的swagger是否直接用了sample的方式，如果是的，直接导入sample
+                                    if 'example' in responses_content.keys():
+                                        tmp_response_dict['json'] = json.dumps(responses_content.get('example'), indent=2)
+
                                     responses_content_fix_ref = ref_format(responses_content)
                                     tmp_response_dict['content'] = yaml.safe_dump(responses_content_fix_ref, default_flow_style=False, allow_unicode=True)
                                 elif 'text/plain' in content_k:
